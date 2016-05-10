@@ -1,0 +1,23 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{BE6B0016-0BA6-A240-496E-0AB2A41DC653}") = "Led Cude Animation Creator", "Assembly-CSharp.csproj", "{EAD2D939-FB3E-84A4-71D8-4C14AA996DDF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EAD2D939-FB3E-84A4-71D8-4C14AA996DDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAD2D939-FB3E-84A4-71D8-4C14AA996DDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAD2D939-FB3E-84A4-71D8-4C14AA996DDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAD2D939-FB3E-84A4-71D8-4C14AA996DDF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
