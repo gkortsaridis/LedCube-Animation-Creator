@@ -30,4 +30,10 @@ public class menu : MonoBehaviour {
 
 		}
 	}
+
+	public void OnGUI(){
+		if (GUI.Button (new Rect (Screen.width-100,Screen.height-100,100,100), "About")) {
+			Application.LoadLevel ("about");
+		}
+	}
 }

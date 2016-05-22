@@ -43,6 +43,11 @@ public class create : MonoBehaviour {
 	}
 
 	void OnGUI(){
+
+		if (GUI.Button (new Rect (Screen.width / 10, posy, 150, 50), "Load from Clipboard")) {
+			loadAnimation ();
+		}
+
 		vSbarValue = GUI.HorizontalScrollbar(new Rect(Screen.width/20, Screen.height*14/15, Screen.width/2.5f, Screen.height/30), vSbarValue, 2.0F, 0.0F, 360.0F);
 
 		if (isPlaying)
@@ -112,44 +117,77 @@ public class create : MonoBehaviour {
 		}
 
 		if (GUI.Button (new Rect (posx, posy + 7 * sizey + 7 * space, 5 * sizex + 4 * space, sizey), "GENERATE CODE")) {
-			string code = "";
+			Debug.Log ("GENERATE!");
+			string code = "int anim_frames = " + maxFrame+";\n";
+			code += "int[anit_frames][125] animation = {";
+
 			for (int fr = 0; fr < maxFrame; fr++) {
+				code += "{";
 				for (int lev = 0; lev < 5; lev++) {
 					for (int l = 0; l < 25; l++) {
-						if (states [lev, l, fr]) {
-							code += "1";
+						if (l*lev != 96) {
+							if (states [lev, l, fr]) {
+								code += "1,";
+							} else {
+								code += "0,";
+							}
 						} else {
-							code += "0";
+							if (states [lev, l, fr]) {
+								code += "1";
+							} else {
+								code += "0";
+							}
 						}
 					}
 				}
-				if (fr != maxFrame-1) {
-					code += ",";
+
+				if (fr != maxFrame - 1) {
+					code += "},";
+				} else {
+					code += "}";
 				}
+
 			}
+
+			code += "};";
+			code = MyEscapeURL(code);
 
 			string t ="mailto:mdasyg@ieee.com?subject=Led%20Cube%20Animation%20code&body="+code;
 			Application.OpenURL(t);
-
-			//Debug.Log (code);
-			//PlayerPrefs.SetString("code",code);
-			//Application.LoadLevel ("code");
 		}
 
 		GUI.enabled = true;
 
-		if(GUI.Button(new Rect (posx, posy + 8 * sizey + 8 * space, 5 * sizex + 4 * space, sizey), "Play")){
+		if (!isPlaying) {
+			GUI.enabled = true;
+		} else {
+			GUI.enabled = false;
+		}
+		if(GUI.Button(new Rect (posx, posy + 8 * sizey + 8 * space, 2.5f * sizex + space, sizey), "Play")){
 			coroutine = iterateFrames ();
 			StartCoroutine(coroutine);
 			isPlaying = true;
 		}
+		GUI.enabled = true;
 
-		if(GUI.Button(new Rect (posx, posy + 9 * sizey + 9 * space, 5 * sizex + 4 * space, sizey), "Pause")){
+		if (isPlaying) {
+			GUI.enabled = true;
+		} else {
+			GUI.enabled = false;
+		}
+		if(GUI.Button(new Rect (posx + 2.5f * sizex + 3*space, posy + 8 * sizey + 8 * space, 2.5f * sizex + space, sizey), "Pause")){
 			StopCoroutine (coroutine);
 			isPlaying = false;
 			frame = 0;
 		}
 
+
+
+	}
+
+	string MyEscapeURL (string url)
+	{
+		return WWW.EscapeURL(url).Replace("+","%20");
 	}
 
 	IEnumerator iterateFrames() {
@@ -167,6 +205,34 @@ public class create : MonoBehaviour {
 
 	public static int getFrame(){
 		return frame;
+	}
+
+	public void loadAnimation(){
+		Debug.Log ("LOAD");
+		string code = GUIUtility.systemCopyBuffer;
+		Debug.Log (code);
+		code = code.Replace ("{","");
+		code = code.Replace ("}","");
+		code = code.Replace (";","");
+		code = code.Replace ("\n","");
+
+		string[] array = code.Split(',');
+		if (array.Length % 125 == 0) {
+			maxFrame = array.Length/125;
+
+			for (int fr = 0; fr < maxFrame; fr++) {
+				for (int lev = 0; lev < 5; lev++) {
+					for (int l = 0; l < 25; l++) {
+						if (array [fr * 125 + 25 * lev + l] == "1") {
+							states [lev, l, fr] = true;
+						} else {
+							states [lev, l, fr] = false;
+						}
+					}
+				}
+			}
+		}
+
 	}
 		
 }
